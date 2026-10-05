@@ -371,7 +371,7 @@ test("mobile dark mode switches panes without overflow or losing selection", asy
   const dark = await page
     .locator(".desk-app")
     .evaluate((el) => getComputedStyle(el).backgroundColor);
-  expect(dark).toBe("rgb(21, 27, 25)");
+  expect(dark).toBe("rgb(20, 28, 35)");
   await page.getByRole("button", { name: "Start reviewing" }).click();
   const first = page.locator("#finding-1");
   await first.getByRole("button", { name: "Accept", exact: true }).click();
@@ -383,7 +383,7 @@ test("mobile dark mode switches panes without overflow or losing selection", asy
     await page
       .locator(".document-paper")
       .evaluate((el) => getComputedStyle(el).backgroundColor),
-  ).toBe("rgb(36, 44, 39)");
+  ).toBe("rgb(35, 45, 54)");
   await page
     .getByRole("button", { name: "Review findings", exact: true })
     .click();

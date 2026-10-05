@@ -1,18 +1,22 @@
 .desk-app {
-  --bg: #f5f7f4;
+  --bg: #f4f7fa;
   --panel: #fff;
-  --soft: #f8faf5;
+  --soft: #f5f9fc;
   --paper: #fff;
-  --ink: #283c30;
-  --text: #4f6053;
-  --muted: #788675;
-  --faint: #919c88;
-  --border: #e1e7dd;
-  --strong-border: #c5d3bd;
-  --green: #356c4d;
-  --accent-bg: #edf4e7;
-  --accent-text: #4d7540;
-  --button-text: #fff;
+  --ink: #23394a;
+  --text: #4a6172;
+  --muted: #6d8393;
+  --faint: #8b9daa;
+  --border: #dfe8ef;
+  --strong-border: #93c8e3;
+  --blue: #028ed5;
+  --accent-bg: #eaf6fd;
+  --accent-text: #00699f;
+  --button-bg: #f3931b;
+  --button-hover: #d97c08;
+  --button-text: #2a1a06;
+  --orange-text: #965300;
+  --orange-soft: #fff2df;
   --high-bg: #fbede4;
   --high-text: #9f6344;
   --high-border: #edcfba;
@@ -22,7 +26,7 @@
   --low-bg: #eef2f8;
   --low-text: #617997;
   --low-border: #d4deed;
-  --shadow: 0 3px 16px #243a2710;
+  --shadow: 0 3px 16px #23394a10;
   --scheme: light;
   color: var(--ink);
   background: var(--bg);
@@ -36,20 +40,21 @@
   letter-spacing: -0.15px;
 }
 .desk-app[data-theme="dark"] {
-  --bg: #151b19;
-  --panel: #1d2521;
-  --soft: #222c25;
-  --paper: #242c27;
-  --ink: #e0e9dc;
-  --text: #bec9b9;
-  --muted: #a0b19b;
-  --faint: #80907c;
-  --border: #334035;
-  --strong-border: #637d59;
-  --green: #a0c38b;
-  --accent-bg: #2b392a;
-  --accent-text: #b1d39d;
-  --button-text: #1c2a1b;
+  --bg: #141c23;
+  --panel: #1c2730;
+  --soft: #23313b;
+  --paper: #232d36;
+  --ink: #e0ebf3;
+  --text: #bdcedb;
+  --muted: #9db2c3;
+  --faint: #7c94a6;
+  --border: #344755;
+  --strong-border: #397da4;
+  --blue: #028ed5;
+  --accent-bg: #153a50;
+  --accent-text: #79caff;
+  --orange-text: #ffb658;
+  --orange-soft: #423121;
   --high-bg: #473328;
   --high-text: #e7b395;
   --high-border: #80583e;
@@ -64,20 +69,21 @@
 }
 @media (prefers-color-scheme: dark) {
   .desk-app[data-theme="system"] {
-    --bg: #151b19;
-    --panel: #1d2521;
-    --soft: #222c25;
-    --paper: #242c27;
-    --ink: #e0e9dc;
-    --text: #bec9b9;
-    --muted: #a0b19b;
-    --faint: #80907c;
-    --border: #334035;
-    --strong-border: #637d59;
-    --green: #a0c38b;
-    --accent-bg: #2b392a;
-    --accent-text: #b1d39d;
-    --button-text: #1c2a1b;
+    --bg: #141c23;
+    --panel: #1c2730;
+    --soft: #23313b;
+    --paper: #232d36;
+    --ink: #e0ebf3;
+    --text: #bdcedb;
+    --muted: #9db2c3;
+    --faint: #7c94a6;
+    --border: #344755;
+    --strong-border: #397da4;
+    --blue: #028ed5;
+    --accent-bg: #153a50;
+    --accent-text: #79caff;
+    --orange-text: #ffb658;
+    --orange-soft: #423121;
     --high-bg: #473328;
     --high-text: #e7b395;
     --high-border: #80583e;
@@ -126,7 +132,7 @@
   text-decoration: none;
 }
 .desk-app :focus-visible {
-  outline: 2px solid var(--green);
+  outline: 2px solid var(--blue);
   outline-offset: 3px;
 }
 .desk-app input:not([type="checkbox"]),
@@ -149,7 +155,7 @@
   color: var(--faint);
 }
 .desk-app input[type="checkbox"] {
-  accent-color: var(--green);
+  accent-color: var(--blue);
   width: 15px;
   height: 15px;
   flex-shrink: 0;
@@ -174,8 +180,8 @@
 .brand-mark {
   width: 36px;
   height: 36px;
-  background: var(--green);
-  color: var(--button-text);
+  background: var(--blue);
+  color: #fff;
   border-radius: 10px;
   display: grid;
   place-items: center;
@@ -442,20 +448,20 @@
   white-space: nowrap;
 }
 .primary-button {
-  background: var(--green);
+  background: var(--button-bg);
   color: var(--button-text);
 }
-.primary-button:hover {
-  filter: brightness(0.94);
+.primary-button:hover:not(:disabled) {
+  background: var(--button-hover);
 }
 .secondary-button {
   background: var(--panel);
-  color: var(--text);
-  border: 1px solid var(--border) !important;
+  color: var(--orange-text);
+  border: 1px solid var(--button-bg) !important;
 }
-.secondary-button:hover {
-  border-color: var(--strong-border) !important;
-  background: var(--soft);
+.secondary-button:hover:not(:disabled) {
+  border-color: var(--button-hover) !important;
+  background: var(--orange-soft);
 }
 .full-width {
   width: 100%;
@@ -682,7 +688,7 @@
   border-radius: 50%;
 }
 .highlight-on .mini-switch {
-  background: var(--green);
+  background: var(--blue);
 }
 .highlight-on .mini-switch span {
   transform: translateX(10px);
@@ -823,7 +829,7 @@
   color: var(--low-text);
 }
 .mark-selected {
-  outline: 2px solid var(--green);
+  outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
 .mark-rejected {
@@ -831,14 +837,14 @@
   border-bottom: 1px dashed var(--muted);
 }
 .paragraph-selected {
-  border-left: 2px solid var(--green);
+  border-left: 2px solid var(--blue);
   padding-left: 8px;
   margin-left: -10px;
 }
 .search-mark {
   background: var(--accent-bg);
   color: var(--accent-text);
-  border-bottom: 1px solid var(--green);
+  border-bottom: 1px solid var(--blue);
 }
 .paper-end {
   text-align: center;
@@ -905,7 +911,7 @@
   border-bottom: 2px solid transparent;
 }
 .review-tabs button.tab-active {
-  border-color: var(--green);
+  border-color: var(--blue);
   color: var(--accent-text);
   font-weight: 550;
 }
@@ -986,7 +992,7 @@
   height: 4px;
   width: 100%;
   background: var(--border);
-  color: var(--green);
+  color: var(--blue);
   margin-top: 13px;
   border-radius: 4px;
   overflow: hidden;
@@ -995,11 +1001,11 @@
   background: var(--border);
 }
 .progress-card progress::-webkit-progress-value {
-  background: var(--green);
+  background: var(--blue);
   border-radius: 4px;
 }
 .progress-card progress::-moz-progress-bar {
-  background: var(--green);
+  background: var(--blue);
 }
 .progress-breakdown {
   display: flex;
@@ -1017,7 +1023,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--green);
+  background: var(--blue);
 }
 .progress-breakdown .rejected-dot {
   background: var(--faint);
@@ -1372,7 +1378,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--green);
+  background: var(--blue);
 }
 .private-field {
   margin-top: 15px;
@@ -1849,7 +1855,7 @@
 }
 .package-file-tabs button.active {
   color: var(--accent-text);
-  border-color: var(--green);
+  border-color: var(--blue);
 }
 .file-preview-content {
   white-space: pre-wrap;
@@ -1911,7 +1917,7 @@
   z-index: 60;
 }
 .desk-toast > svg {
-  color: var(--green);
+  color: var(--blue);
 }
 .desk-toast > .text-button {
   margin-left: 5px;
