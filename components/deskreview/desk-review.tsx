@@ -13,6 +13,7 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
+  BarChart3,
   ChevronRight,
   CircleCheck,
   CircleHelp,
@@ -55,6 +56,7 @@ import {
 } from "./reviewer-model";
 import { useWorkspace } from "./use-workspace";
 import ReviewerCard from "./reviewer-card";
+import JournalDashboard from "./journal-dashboard";
 import "./desk-review.css";
 
 const tabs: ReviewTab[] = ["Overview", "Findings", "Similarity", "Files"];
@@ -139,7 +141,9 @@ export default function DeskReview() {
     addDocument,
     setTheme,
   } = useWorkspace();
-  const [section, setSection] = useState<"review" | "documents">("review");
+  const [section, setSection] = useState<"review" | "documents" | "dashboard">(
+    "review",
+  );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modal, setModal] = useState<"upload" | "package" | "help" | null>(
     null,
@@ -438,6 +442,16 @@ export default function DeskReview() {
         <div className="nav-label">WORKSPACE</div>
         <nav aria-label="Main navigation">
           <button
+            className={`nav-item ${section === "dashboard" ? "nav-active" : ""}`}
+            aria-current={section === "dashboard" ? "page" : undefined}
+            onClick={() => {
+              setSection("dashboard");
+              setSidebarOpen(false);
+            }}
+          >
+            <BarChart3 size={18} /> Dashboard
+          </button>
+          <button
             className={`nav-item ${section === "review" ? "nav-active" : ""}`}
             onClick={() => {
               setSection("review");
@@ -479,7 +493,11 @@ export default function DeskReview() {
           ))}
         </div>
         <div className="sidebar-bottom">
-          <form action="/api/auth/logout" method="post"><button className="help-button" type="submit"><LogOut size={16} /> Lock workspace</button></form>
+          <form action="/api/auth/logout" method="post">
+            <button className="help-button" type="submit">
+              <LogOut size={16} /> Lock workspace
+            </button>
+          </form>
           <div className="local-note">
             <ShieldCheck size={18} />
             <strong>Browser-local workspace</strong>
@@ -507,7 +525,11 @@ export default function DeskReview() {
             <span>Reviewer workspace</span>
             <ChevronRight size={14} />
             <strong>
-              {section === "documents" ? "Documents" : "Desk review"}
+              {section === "dashboard"
+                ? "Dashboard"
+                : section === "documents"
+                  ? "Documents"
+                  : "Desk review"}
             </strong>
           </div>
           <div className="topbar-actions">
@@ -543,7 +565,9 @@ export default function DeskReview() {
           </div>
         </header>
         <main className="desk-content">
-          {section === "documents" ? (
+          {section === "dashboard" ? (
+            <JournalDashboard />
+          ) : section === "documents" ? (
             <>
               <div className="page-heading">
                 <div>

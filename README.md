@@ -25,6 +25,8 @@ node -e "console.log(require('node:crypto').createHash('sha256').update(require(
 
 ## Reviewer workflow
 
+The Dashboard navigation tab shows the Journal The Winners submission pipeline, submission trends, decision times, and rates from the supplied reference screenshots. These are explicitly labeled reference figures, not live or browser-local review statistics. Filter the metrics and export the visible tables as CSV. Each of the four summary cards opens paper details: title, authors, and submission timestamp (WIB, UTC+7), with title/author search. These lists are labeled illustrative placeholders because the screenshots contain no underlying paper records; their counts do not represent the aggregate totals. Accepted and desk-rejected lists filter by decision; first editorial decision includes papers with a recorded first decision. The period is fixed to the supplied snapshot; journal API integration can replace `components/deskreview/dashboard-data.ts` later.
+
 1. Open a manuscript and inspect suggested findings beside the original text.
 2. Accept a finding, edit and accept its wording, or reject it. Undecided findings stay Pending.
 3. Use Next pending, status/priority filters, and previous/next navigation to work through the review.

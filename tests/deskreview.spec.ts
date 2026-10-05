@@ -9,6 +9,67 @@ test.beforeEach(async ({ page }) => {
   });
   expect(response.status()).toBe(200);
 });
+
+test("dashboard shows reference metrics, filters and exports CSV, and fits mobile", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/deskreview");
+  await page.getByRole("button", { name: "Dashboard", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Editorial dashboard" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Reference snapshot", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("img", { name: /18 active submissions/ }),
+  ).toBeVisible();
+  const deskReject = page
+    .getByRole("row")
+    .filter({
+      has: page.getByRole("rowheader", {
+        name: "Desk reject rate",
+        exact: true,
+      }),
+    });
+  await expect(deskReject.getByRole("cell").first()).toHaveText("69%");
+  await page.screenshot({
+    path: "test-results/dashboard-desktop.png",
+    fullPage: true,
+  });
+  await page.getByLabel("Dashboard metrics").selectOption("performance");
+  await expect(
+    page.getByRole("heading", { name: "Submission trends" }),
+  ).not.toBeVisible();
+  const downloadEvent = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export statistics" }).click();
+  const download = await downloadEvent;
+  expect(download.suggestedFilename()).toBe(
+    "the-winners-reference-statistics.csv",
+  );
+  const csv = await fs.readFile((await download.path())!, "utf8");
+  expect(csv).toContain('"Desk reject rate","69%","48%"');
+  expect(csv).not.toContain("Submissions received");
+  await page.getByLabel("Dashboard metrics").selectOption("all");
+  await page.getByLabel("Color theme").selectOption("dark");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(() => page.locator(".desk-sidebar").evaluate(el => el.getBoundingClientRect().right)).toBeLessThanOrEqual(0);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: "test-results/dashboard-mobile-dark.png",
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page
+    .getByRole("button", { name: "Current review", exact: true })
+    .click();
+  await expect(page.getByRole("tab", { name: "Overview" })).toBeVisible();
+});
 import {
   findings,
   sampleManuscript,
@@ -17,6 +78,45 @@ import {
   authorFiles,
   emptyDraft,
 } from "../components/deskreview/reviewer-model";
+
+test("dashboard cards open matching paper details with search and accessible close", async ({ page }) => {
+  await page.goto("/deskreview");
+  await page.getByRole("button", { name: "Dashboard", exact: true }).click();
+  for (const [name, count, title] of [
+    ["Submissions received", 4, "Sample manuscript 04"],
+    ["Submissions accepted", 1, "Sample manuscript 01"],
+    ["Desk reject rate", 1, "Sample manuscript 02"],
+    ["First editorial decision", 3, "Sample manuscript 01"],
+  ] as const) {
+    const card = page.getByRole("button", { name: `View papers: ${name}`, exact: true });
+    await card.click();
+    const dialog = page.getByRole("dialog", { name, exact: true });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByText("Illustrative paper list", { exact: true })).toBeVisible();
+    await expect(dialog.locator("tbody tr")).toHaveCount(count);
+    await expect(dialog.getByRole("rowheader", { name: title, exact: true })).toBeVisible();
+    await expect(dialog.getByRole("columnheader", { name: "Authors", exact: true })).toBeVisible();
+    await expect(dialog.getByRole("columnheader", { name: /Submission time/ })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await expect(card).toBeFocused();
+  }
+  await page.getByRole("button", { name: "View papers: Submissions received", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Submissions received", exact: true });
+  const search = dialog.getByRole("searchbox");
+  await search.fill("Sample author B");
+  await expect(dialog.locator("tbody tr")).toHaveCount(1);
+  await expect(dialog.locator("time")).toHaveText("01 Sept 2026, 09:30");
+  await search.fill("No such paper");
+  await expect(dialog.getByRole("heading", { name: "No matching papers" })).toBeVisible();
+  await dialog.getByRole("button", { name: "Clear search" }).click();
+  await expect(dialog.locator("tbody tr")).toHaveCount(4);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await dialog.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+  await page.screenshot({ path: "test-results/dashboard-paper-details-mobile.png", fullPage: true });
+  await dialog.getByRole("button", { name: "Back to dashboard" }).click();
+  await expect(dialog).not.toBeVisible();
+});
 
 test("author package allowlist excludes all private data and uncommitted edits", () => {
   const draft = emptyDraft();
