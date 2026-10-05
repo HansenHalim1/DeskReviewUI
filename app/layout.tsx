@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "deskreview · Reviewer workspace",
   description:
     "A focused workspace for manuscript review and author-facing feedback.",
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/icon.svg?v=winners", shortcut: "/favicon.ico?v=winners" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

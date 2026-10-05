@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   useEffect,
   useRef,
@@ -12,7 +13,6 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
-  Asterisk,
   ChevronRight,
   CircleCheck,
   CircleHelp,
@@ -22,6 +22,7 @@ import {
   History,
   LayoutPanelLeft,
   LoaderCircle,
+  LogOut,
   Maximize2,
   Menu,
   Minimize2,
@@ -406,11 +407,31 @@ export default function DeskReview() {
         />
       )}
       <aside className={`desk-sidebar ${sidebarOpen ? "sidebar-open" : ""}`}>
-        <a className="brand" href="/deskreview">
-          <span className="brand-mark">
-            <Asterisk size={28} />
+        <a
+          className="brand"
+          href="/deskreview"
+          aria-label="BINUS deskreview home"
+        >
+          <span className="brand-logos">
+            <Image
+              className="university-logo"
+              src="/branding/binus-university.svg"
+              width={122}
+              height={74}
+              alt="BINUS University"
+              unoptimized
+            />
+            <span className="brand-logo-divider" aria-hidden="true" />
+            <Image
+              className="journal-logo"
+              src="/branding/binus-journal.svg"
+              width={1146}
+              height={508}
+              alt="BINUS Journal"
+              unoptimized
+            />
           </span>
-          <span>
+          <span className="brand-name">
             deskreview<small>REVIEWER WORKSPACE</small>
           </span>
         </a>
@@ -458,6 +479,7 @@ export default function DeskReview() {
           ))}
         </div>
         <div className="sidebar-bottom">
+          <form action="/api/auth/logout" method="post"><button className="help-button" type="submit"><LogOut size={16} /> Lock workspace</button></form>
           <div className="local-note">
             <ShieldCheck size={18} />
             <strong>Browser-local workspace</strong>

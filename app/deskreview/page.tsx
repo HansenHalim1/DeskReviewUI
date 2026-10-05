@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import DeskReview from "@/components/deskreview/desk-review";
+import { requireSession } from "@/lib/access";
 
 export const metadata: Metadata = {
   title: "deskreview · Reviewer workspace",
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
     "Evaluate manuscript findings, record your assessment, and prepare approved feedback for authors.",
 };
 
-export default function Page() {
+export default async function Page() {
+  await requireSession();
   return <DeskReview />;
 }

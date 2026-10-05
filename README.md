@@ -11,6 +11,18 @@ npm run dev
 
 Open http://localhost:3000/deskreview.
 
+## Website access
+
+The website requires a shared 64-character access key. The generated key is stored in `.env.local` as `DESKREVIEW_ACCESS_KEY`; copy its value into the login form. `DESKREVIEW_SESSION_SECRET` is a separate signing secret and must never be shared with reviewers. Both variables remain server-side and `.env.local` is gitignored. No `NEXT_PUBLIC_` credential is used.
+
+Login creates an eight-hour signed HttpOnly session cookie (Secure on HTTPS, SameSite Strict). Pages and API routes require that session. Lock workspace clears the cookie without deleting browser-local drafts. Changing either environment variable invalidates existing sessions after the server restarts or redeploys. Missing configuration blocks access. This is shared-key access, with no individual reviewer accounts.
+
+To generate fresh values, run this command twice and assign one value to each variable in `.env.local`:
+
+```sh
+node -e "console.log(require('node:crypto').createHash('sha256').update(require('node:crypto').randomBytes(32)).digest('hex'))"
+```
+
 ## Reviewer workflow
 
 1. Open a manuscript and inspect suggested findings beside the original text.
@@ -46,7 +58,7 @@ The header reports Saving, Saved on this browser, or a storage failure. Failed/f
 
 This remains an interactive interface preview. The included manuscript has illustrative findings and similarity data. No Qwen backend or similarity service is connected. Uploaded DOCX documents show their actual text without simulated review results. Reviewers can still record their own assessment.
 
-DOCX upload is limited to 4 MB and extracts text and headings. It does not reproduce Word pagination, images, tables, or tracked changes. The original binary is not stored. There is no user authentication or server-side storage in this starter.
+DOCX upload is limited to 4 MB and extracts text and headings. It does not reproduce Word pagination, images, tables, or tracked changes. The original binary is not stored. Shared-key website authentication does not sync or store reviewer documents on the server.
 
 ## Edit
 
@@ -74,7 +86,7 @@ Coverage includes author-package privacy, decision editing/undo, pending export 
 
 ## Vercel
 
-This interface requires no environment variables. No project is linked in this folder. From the repository directory:
+Set `DESKREVIEW_ACCESS_KEY` and `DESKREVIEW_SESSION_SECRET` in the Vercel project's environment variables using the values from `.env.local`. Configure Production and any Preview deployments that need access, then redeploy. Never upload the env file to GitHub. No project is linked in this folder. From the repository directory:
 
 ```sh
 npx vercel login

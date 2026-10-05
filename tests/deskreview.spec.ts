@@ -1,6 +1,14 @@
 import { expect, test } from "@playwright/test";
 import JSZip from "jszip";
 import fs from "node:fs/promises";
+
+test.beforeEach(async ({ page }) => {
+  const response = await page.request.post("/api/auth/login", {
+    headers: { Origin: "http://localhost:3100" },
+    data: { key: process.env.DESKREVIEW_ACCESS_KEY },
+  });
+  expect(response.status()).toBe(200);
+});
 import {
   findings,
   sampleManuscript,
@@ -254,23 +262,19 @@ test("DOCX upload has real text, clear errors, and document-local history", asyn
   await page
     .getByRole("button", { name: "Open manuscript", exact: true })
     .click();
-  await page
-    .locator('input[type="file"]')
-    .setInputFiles({
-      name: "wrong.pdf",
-      mimeType: "application/pdf",
-      buffer: Buffer.from("not docx"),
-    });
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "wrong.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from("not docx"),
+  });
   await expect(page.locator(".upload-error")).toContainText(
     "Word document (.docx)",
   );
-  await page
-    .locator('input[type="file"]')
-    .setInputFiles({
-      name: "broken.docx",
-      mimeType: "application/octet-stream",
-      buffer: Buffer.from("not a zip"),
-    });
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "broken.docx",
+    mimeType: "application/octet-stream",
+    buffer: Buffer.from("not a zip"),
+  });
   await expect(page.locator(".upload-error")).toContainText(
     "could not be opened",
   );
@@ -279,14 +283,12 @@ test("DOCX upload has real text, clear errors, and document-local history", asyn
     "word/document.xml",
     '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>My uploaded research</w:t></w:r></w:p><w:p><w:r><w:t>A real paragraph about local document previews.</w:t></w:r></w:p></w:body></w:document>',
   );
-  await page
-    .locator('input[type="file"]')
-    .setInputFiles({
-      name: "research.docx",
-      mimeType:
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      buffer: await zip.generateAsync({ type: "nodebuffer" }),
-    });
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "research.docx",
+    mimeType:
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    buffer: await zip.generateAsync({ type: "nodebuffer" }),
+  });
   await expect(page.getByRole("dialog")).not.toBeVisible();
   await expect(
     page.getByText("A real paragraph about local document previews."),

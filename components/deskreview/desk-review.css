@@ -173,24 +173,51 @@
 }
 .brand {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 0 7px 35px;
+  gap: 12px;
+  padding: 0 0 28px;
 }
-.brand-mark {
-  width: 36px;
-  height: 36px;
-  background: var(--blue);
-  color: #fff;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
+.brand-logos {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 74px;
+  padding: 12px 9px;
+  background: #fff;
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
 }
-.brand > span:last-child {
-  font-size: 22px;
+.brand-logos img {
+  display: block;
+  height: auto;
+  object-fit: contain;
+  min-width: 0;
+}
+.university-logo {
+  width: 68px;
+  flex-shrink: 0;
+}
+.journal-logo {
+  width: 84px;
+  flex: 1;
+}
+.brand-logo-divider {
+  width: 1px;
+  height: 30px;
+  flex-shrink: 0;
+  background: #e1e8ee;
+}
+.brand .brand-name {
+  align-self: stretch;
+  padding-left: 11px;
+  font-size: 18px;
   font-weight: 550;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   line-height: 1.1;
+  text-align: left;
 }
 .brand small {
   display: block;
@@ -1989,13 +2016,6 @@
     padding-left: 2px;
     padding-right: 2px;
   }
-  .brand > span:last-child {
-    font-size: 21px;
-  }
-  .brand-mark {
-    width: 32px;
-    height: 32px;
-  }
   .brand small {
     font-size: 6px;
   }
@@ -2096,13 +2116,6 @@
   }
   .desk-main {
     margin-left: 183px;
-  }
-  .brand > span:last-child {
-    font-size: 19px;
-  }
-  .brand-mark {
-    width: 30px;
-    height: 30px;
   }
   .brand small {
     font-size: 5.5px;
@@ -2270,13 +2283,6 @@
   }
   .desk-content {
     padding: 23px 20px 15px;
-  }
-  .brand > span:last-child {
-    font-size: 22px;
-  }
-  .brand-mark {
-    width: 36px;
-    height: 36px;
   }
   .brand small {
     font-size: 7px;
